@@ -24,22 +24,23 @@ public class BillingModel {
     public BillingModel(){
         connection = Database.getConnection();
     } 
-    public void insertBilling(Billing billing){
+    public Billing insertBilling(Billing billing){
         PreparedStatement st = null;
-        String sql = "insert into billing(id_komputer,nis,date_time,id_mapel,id_guru,created_at,updated_at,deleted_at) values(?,?,?,?,?,?,?,?)";
+        String sql = "insert into billing(id_komputer,nis,date_time,jam_keluar,id_mapel,id_guru,created_at,updated_at,deleted_at) values(?,?,?,?,?,?,?,?,?)";
         try{
             st = connection.prepareStatement(sql);
             
             st.setString(1, billing.getId_komputer());
             st.setString(2, billing.getNis());
             st.setTimestamp(3, billing.getDate_time());
-            st.setString(4, billing.getId_mapel());
-            st.setString(5, billing.getId_guru());
-            st.setTimestamp(6, billing.getDate_time());
+            st.setTimestamp(4, billing.getJam_keluar());
+            st.setString(5, billing.getId_mapel());
+            st.setString(6, billing.getId_guru());
             st.setTimestamp(7, billing.getDate_time());
+            st.setTimestamp(8, billing.getDate_time());
             java.util.Date date=new java.util.Date();
             java.sql.Date sqlDate=new java.sql.Date(0000-00-00);
-            st.setDate(8, sqlDate );
+            st.setDate(9, sqlDate );
             st.executeUpdate();
         }catch(SQLException ex){
             Logger.getLogger(BillingModel.class.getName()).log(Level.SEVERE,null,ex);
@@ -52,5 +53,6 @@ public class BillingModel {
                 }
             }
         }
+        return billing;
     }
 }

@@ -1,0 +1,1 @@
+javaw -Xmx200m -jar C:\Users\ASUS\Documents\E-lab\E-lab\dist\E-lab.jar

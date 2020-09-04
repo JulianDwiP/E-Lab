@@ -12,5 +12,5 @@ import elab.entity.Billing;
  * @author Julian Dwi Putra
  */
 public interface BillingService {
-    void insertBilling(Billing billing);
+    Billing insertBilling(Billing billing);
 }

@@ -1,7 +1,6 @@
 
 package elab.tampilan;
 
-import elab.config.Database;
 import elab.entity.Billing;
 import elab.entity.Guru;
 import elab.entity.Hari;
@@ -19,34 +18,24 @@ import elab.model.JadwalLabModel;
 import elab.model.Jadwal_mapelModel;
 import elab.model.Jumlah_mapelModel;
 import elab.model.MapelModel;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.WindowConstants;
 
 
 public class FormMain extends javax.swing.JFrame {
     private GuruModel guruModel = new GuruModel();
     Guru guru = new Guru();
-    String id_kelas, id_hari;
+    String id_kelas, id_hari, jam_keluar, id_jadwal_mapel;
     JadwalLabModel jadwalLabModel = new JadwalLabModel();
-//    Jadwal_lab1 jadwal_lab =new Jadwal_lab1();
     Jadwal_lab1 jl1 = new Jadwal_lab1();
-    
-//    Jadwal_lab2 jadwal_lab1 = new Jadwal_lab2();
     Jadwal_lab2 jl2 = null;
     
     Jadwal_mapelModel jadwal_mapelModel = new Jadwal_mapelModel();
@@ -62,6 +51,9 @@ public class FormMain extends javax.swing.JFrame {
     
     User user = new User();
     Hari hari = new Hari();
+    
+    Billing billing = new Billing();
+    BillingModel billingModel = new BillingModel();
     public FormMain() throws SQLException {
         initComponents();
         
@@ -83,6 +75,10 @@ public class FormMain extends javax.swing.JFrame {
         test_1.setVisible(false);
         txt_idHari.setVisible(false);
         txt_idLab.setVisible(false);
+        txt_jamKeluar.setVisible(false);
+        txt_idGuru.setVisible(false);
+        
+//        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
     
     public void setNama(String nama){
@@ -109,6 +105,10 @@ public class FormMain extends javax.swing.JFrame {
     }
     public void setHari(String hari){
         test_1.setText(hari);
+    }
+    public void setJam_masuk(String jam){
+        txt_jamKeluar.setText(jam);
+        jam_keluar = txt_jamKeluar.getText();
     }
     
     @SuppressWarnings("unchecked")
@@ -146,6 +146,9 @@ public class FormMain extends javax.swing.JFrame {
         txt_waktuAkhir1 = new javax.swing.JLabel();
         txt_jadwal1 = new javax.swing.JLabel();
         txt_waktuAwal1 = new javax.swing.JLabel();
+        txt_jamKeluar = new javax.swing.JLabel();
+        txt_idGuru = new javax.swing.JLabel();
+        btn_task = new javax.swing.JButton();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -258,6 +261,17 @@ public class FormMain extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        txt_jamKeluar.setText("jLabel6");
+
+        txt_idGuru.setText("jLabel6");
+
+        btn_task.setText("Click Task");
+        btn_task.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_taskActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -270,11 +284,14 @@ public class FormMain extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txt_date, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txt_jadwal2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btn_logout))
+                                .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txt_idLab, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -285,7 +302,11 @@ public class FormMain extends javax.swing.JFrame {
                                 .addComponent(test_1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_idHari, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_jamKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_idGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                                 .addComponent(lblNama))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,28 +325,31 @@ public class FormMain extends javax.swing.JFrame {
                                         .addComponent(txt_waktuAkhir3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(panel_jadwal1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_idKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)))
-                        .addGap(23, 23, 23))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txt_jadwal2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txt_idKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(32, 32, 32))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btn_task)
+                                        .addGap(14, 14, 14)))))
+                        .addGap(23, 23, 23))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txt_date, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(txt_idKelas)
-                        .addGap(40, 40, 40))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_task))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panel_jadwal1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(panel_jadwal1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_jadwal2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -339,39 +363,77 @@ public class FormMain extends javax.swing.JFrame {
                     .addComponent(txt_waktuAwal3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(txt_waktuAkhir3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
+                .addGap(15, 15, 15)
+                .addComponent(btn_logout)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNama)
                     .addComponent(txt_nis)
                     .addComponent(txt_idkom)
                     .addComponent(test_1)
                     .addComponent(txt_idHari)
-                    .addComponent(txt_idLab))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_logout)
-                .addGap(290, 290, 290))
+                    .addComponent(txt_idLab)
+                    .addComponent(txt_jamKeluar)
+                    .addComponent(txt_idGuru)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
-        // TODO add your handling code here:
+        try {
+            postBilling();
+            dispose();
+        } catch (ParseException ex) {
+            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_logoutActionPerformed
 
+    private void btn_taskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_taskActionPerformed
+        TampilanTask tampilanTask = new TampilanTask();
+        tampilanTask.setVisible(true);
+        
+        tampilanTask.setId_jadwal_mapel("8", txt_nis.getText());
+        dispose();
+    }//GEN-LAST:event_btn_taskActionPerformed
+
+    private void postBilling() throws ParseException{
+        String nis = txt_nis.getText();
+        String id_kom = txt_idkom.getText();
+        String id_guru = txt_idGuru.getText();
+        Date date = new Date();
+        System.out.println(""+jam_keluar);
+        Date jamKeldate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jam_keluar);
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a");
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String jam_masuk = dateFormat.format(date);
+        String jam_kel = dateFormat.format(jamKeldate);
+        Date jamKel = dateFormat.parse(jam_masuk);
+        Date jamMasuk = dateFormat1.parse(jam_keluar);
+        Timestamp ts_jamkel = new Timestamp(jamKel.getTime());
+        Timestamp ts_jamMasuk = new Timestamp(jamMasuk.getTime());
+        
+        billing.setNis(nis);
+        billing.setDate_time(ts_jamMasuk);
+        billing.setId_guru("1");
+        billing.setId_komputer(id_kom);
+        billing.setId_mapel("1");
+        billing.setJam_keluar(ts_jamkel);
+        billingModel.insertBilling(billing);
+    }
+    
     private void getDatajadwal_mapel() {
         jl1 = jadwalLabModel.getJadwal_1(user, hari);
         jl2 = jadwalLabModel.getJadwal_2(user, hari);
@@ -399,7 +461,7 @@ public class FormMain extends javax.swing.JFrame {
             txt_jadwal1.setText(mapel.getNama_mapel());
             txt_waktuAwal1.setText(jmp1.getJam_mulai());
             txt_waktuAkhir1.setText(jmp1.getJam_selesai());
-            
+            txt_idGuru.setText(jmp1.getId_guru());
             jmp2 = jadwal_mapelModel.getJadwal_mapel2(jl1);
             if (jmp2 != null) {
                 mapel = mapelModel.getMapel_2(jmp2);
@@ -428,6 +490,7 @@ public class FormMain extends javax.swing.JFrame {
                 }
             }else{
                 jmp1 = jadwal_mapelModel.getJadwal_mapel2_1(jl2);
+                
                 if (jmp1 != null) {
                     mapel = mapelModel.getMapel_1(jmp1);
                     txt_jadwal2.setText(mapel.getNama_mapel());
@@ -459,6 +522,7 @@ public class FormMain extends javax.swing.JFrame {
             
             if (jumlah_mapel.getHasil().equals("3")) {
                 jmp1 = jadwal_mapelModel.getJadwal_mapel2_1(jl2);
+                txt_idGuru.setText(jmp1.getId_guru());
                 mapel = mapelModel.getMapel_1(jmp1);
                 txt_jadwal1.setText(mapel.getNama_mapel());
                 txt_waktuAwal1.setText(jmp1.getJam_mulai());
@@ -477,6 +541,7 @@ public class FormMain extends javax.swing.JFrame {
                 txt_waktuAkhir3.setText(jmp3.getJam_selesai());
             }else if(jumlah_mapel.getHasil().equals("2")){
                 jmp1 = jadwal_mapelModel.getJadwal_mapel2_1(jl2);
+                txt_idGuru.setText(jmp1.getId_guru());
                 mapel = mapelModel.getMapel_1(jmp1);
                 txt_jadwal1.setText(mapel.getNama_mapel());
                 txt_waktuAwal1.setText(jmp1.getJam_mulai());
@@ -497,6 +562,7 @@ public class FormMain extends javax.swing.JFrame {
                 txt_jadwal1.setText(mapel.getNama_mapel());
                 txt_waktuAwal1.setText(jmp1.getJam_mulai());
                 txt_waktuAkhir1.setText(jmp1.getJam_selesai());
+                txt_idGuru.setText(jmp1.getId_guru());
                 
                 txt_jadwal2.setText("Kosong");
                 txt_waktuAwal2.setText("--:--");
@@ -631,6 +697,7 @@ public class FormMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_logout;
+    private javax.swing.JButton btn_task;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -647,6 +714,7 @@ public class FormMain extends javax.swing.JFrame {
     private javax.swing.JPanel panel_jadwal1;
     private javax.swing.JLabel test_1;
     private javax.swing.JLabel txt_date;
+    private javax.swing.JLabel txt_idGuru;
     private javax.swing.JLabel txt_idHari;
     private javax.swing.JLabel txt_idKelas;
     private javax.swing.JLabel txt_idLab;
@@ -654,6 +722,7 @@ public class FormMain extends javax.swing.JFrame {
     private javax.swing.JLabel txt_jadwal1;
     private javax.swing.JLabel txt_jadwal2;
     private javax.swing.JLabel txt_jadwal3;
+    private javax.swing.JLabel txt_jamKeluar;
     private javax.swing.JLabel txt_nis;
     private javax.swing.JLabel txt_waktuAkhir1;
     private javax.swing.JLabel txt_waktuAkhir2;

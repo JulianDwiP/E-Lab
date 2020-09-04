@@ -16,8 +16,18 @@ public class Billing {
     String id_komputer;
     String nis;
     Timestamp date_time;
+    Timestamp jam_keluar;
     String id_mapel;
     String id_guru;
+
+    public Timestamp getJam_keluar() {
+        return jam_keluar;
+    }
+
+    public void setJam_keluar(Timestamp jam_keluar) {
+        this.jam_keluar = jam_keluar;
+    }
+    
 
     public String getId_billing() {
         return id_billing;
