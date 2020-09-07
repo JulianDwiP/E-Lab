@@ -7,9 +7,13 @@ package elab.tampilan;
 
 import elab.entity.Tugas;
 import elab.entity.WorkDone;
+import elab.model.DownloadTugasModel;
 import elab.model.TugasModel;
 import elab.model.WorkDoneModel;
 import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -47,6 +51,7 @@ public class TampilanTask extends javax.swing.JFrame {
         btn_done = new javax.swing.JButton();
         tx_id_jadwal_mapel = new javax.swing.JLabel();
         txt_status_tugas = new javax.swing.JLabel();
+        btn_back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,6 +66,11 @@ public class TampilanTask extends javax.swing.JFrame {
         jLabel1.setText("Attachments");
 
         btn_file1.setText("File 1");
+        btn_file1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_file1ActionPerformed(evt);
+            }
+        });
 
         btn_file2.setText("File 2");
 
@@ -68,6 +78,11 @@ public class TampilanTask extends javax.swing.JFrame {
         jLabel2.setToolTipText("");
 
         btn_kirimFile.setText("Kirim file");
+        btn_kirimFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_kirimFileActionPerformed(evt);
+            }
+        });
 
         btn_done.setText("Tandai sudah selesai");
         btn_done.addActionListener(new java.awt.event.ActionListener() {
@@ -104,47 +119,63 @@ public class TampilanTask extends javax.swing.JFrame {
 
         txt_status_tugas.setText("Status : Not Done");
 
+        btn_back.setText("Back");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_file1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_file2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_status_tugas, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txt_deskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_file1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_file2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txt_deskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btn_back)
+                                .addGap(18, 18, 18)
+                                .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_status_tugas, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_status_tugas)
+                    .addComponent(btn_back))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_status_tugas))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addComponent(txt_deskripsi, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_deskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_file1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_file2)))
-                .addGap(0, 19, Short.MAX_VALUE))
+                        .addComponent(btn_file2)
+                        .addContainerGap(25, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -167,15 +198,30 @@ public class TampilanTask extends javax.swing.JFrame {
         
         w = workDoneModel.getWork(niss, id_tugas);
         if(w.getStatus().equals("Done")){
-            workDoneModel.UpdateWork("Not Done", niss);
+            workDoneModel.UpdateWork("Not Done", niss, id_tugas);
+            workDoneModel.UpdateTugas("Not Done", id_tugas);
             txt_status_tugas.setText("Status : Not Done");
             btn_done.setText("Turn In");
-        }else{
-            workDoneModel.UpdateWork("Done", niss);
+        }else if(w.getStatus().equals("Not Done")){
+            workDoneModel.UpdateWork("Done", niss, id_tugas);
+            workDoneModel.UpdateTugas("Done", id_tugas);
             txt_status_tugas.setText("Status : Done");
             btn_done.setText("Turn Off");
         }
     }//GEN-LAST:event_btn_doneActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        dispose();
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void btn_file1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_file1ActionPerformed
+        DownloadTugasModel downloadTugasModel = new DownloadTugasModel();
+        downloadTugasModel.downloadFile_1();
+    }//GEN-LAST:event_btn_file1ActionPerformed
+
+    private void btn_kirimFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kirimFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_kirimFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -195,16 +241,48 @@ public class TampilanTask extends javax.swing.JFrame {
         
         t = tm.getTugas(id_jadwal_mapel);
         id_tugas = t.getId_tugas();
-        if (t != null) {
+        WorkDone w = new WorkDone();
+        WorkDoneModel workDoneModel = new WorkDoneModel();
+        
+        w = workDoneModel.getWork(niss, id_tugas);
+        if(w == null){
+            workDoneModel.InsertWork(niss, id_tugas, "Not Done");
+            w = workDoneModel.getWork(niss, id_tugas);
+            
+            if (w.getStatus().equals("Done")) {
+            txt_status_tugas.setText("Status : Done");
+            btn_done.setText("Turn Off");
+            }else{
+            txt_status_tugas.setText("Status : Not Done");
+            btn_done.setText("Turn In");
+            }
+            if (t != null) {
             txt_deskripsi.setPreferredSize(new Dimension(250,159));
             txt_deadline.setText("Deadline tugas "+t.getDue_date());
             txt_judulTask.setText(t.getTitle());
             txt_deskripsi.setText(t.getDescription());
             txt_status_tugas.setText("Status : "+t.getStatus());
-        }else{
+            }else{
             txt_deadline.setText("no tugas");
+          }
+        }else{
+            if (w.getStatus().equals("Done")) {
+            txt_status_tugas.setText("Status : Done");
+            btn_done.setText("Turn Off");
+            }else{
+            txt_status_tugas.setText("Status : Not Done");
+            btn_done.setText("Turn In");
+            }
+            if (t != null) {
+            txt_deskripsi.setPreferredSize(new Dimension(250,159));
+            txt_deadline.setText("Deadline tugas "+t.getDue_date());
+            txt_judulTask.setText(t.getTitle());
+            txt_deskripsi.setText(t.getDescription());
+            txt_status_tugas.setText("Status : "+t.getStatus());
+            }else{
+            txt_deadline.setText("no tugas");
+          }
         }
-        
     }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -239,6 +317,7 @@ public class TampilanTask extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_done;
     private javax.swing.JButton btn_file1;
     private javax.swing.JButton btn_file2;

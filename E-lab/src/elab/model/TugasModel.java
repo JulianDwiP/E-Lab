@@ -41,7 +41,7 @@ public class TugasModel {
               m.setId_tugas(rs.getString("id_tugas"));
               m.setId_jadwal_mapel(rs.getString("id_jadwal_mapel"));
               m.setTitle(rs.getString("title"));
-              m.setDescription(rs.getString("desciption"));
+              m.setDescription(rs.getString("description"));
               m.setDue_date(rs.getString("due_date"));
               m.setStatus(rs.getString("status"));
           }

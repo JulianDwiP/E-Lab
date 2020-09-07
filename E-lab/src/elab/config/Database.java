@@ -18,7 +18,7 @@ public class Database {
     public static Connection getConnection(){
         if(connection==null){
             try{
-                String url = "jdbc:mysql://localhost:3306/elab";
+                String url = "jdbc:mysql://localhost:3306/e-lab";
                 String user = "root";
                 String pass = "";
                 DriverManager.registerDriver(new com.mysql.jdbc.Driver());

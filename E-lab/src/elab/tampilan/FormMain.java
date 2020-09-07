@@ -405,7 +405,6 @@ public class FormMain extends javax.swing.JFrame {
         tampilanTask.setVisible(true);
         
         tampilanTask.setId_jadwal_mapel("8", txt_nis.getText());
-        dispose();
     }//GEN-LAST:event_btn_taskActionPerformed
 
     private void postBilling() throws ParseException{

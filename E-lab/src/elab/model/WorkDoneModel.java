@@ -9,6 +9,7 @@ import elab.config.Database;
 import elab.entity.Tugas;
 import elab.entity.WorkDone;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,15 +68,65 @@ public class WorkDoneModel {
             }
         }
     
-    public void UpdateWork(String status, String nis) {
+    public void InsertWork(String nis, String id_tugas, String status){
         PreparedStatement st = null;
         
-        String sql = "update work set status =? where nis=?  ";
+        String sql = "insert into work(nis,id_tugas,status, created_at,updated_at, deleted_at) value(?,?,?,?,?,?)";
+        try {
+            st = connection.prepareStatement(sql);
+            st.setString(1, nis);
+            st.setString(2, id_tugas);
+            st.setString(3, status);
+            java.util.Date date=new java.util.Date();
+            java.sql.Date sqlDate=new java.sql.Date(0000-00-00);
+            st.setDate(4, sqlDate);
+            st.setDate(5, sqlDate);
+            st.setDate(6, sqlDate);
+            st.executeUpdate();
+        }catch (SQLException ex){
+            Logger.getLogger(WorkDoneModel.class.getName()).log(Level.SEVERE,null,ex);
+        }finally{
+            if(st!=null){
+                try{
+                    st.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(WorkDoneModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+            }
+        }  
+    }
+    
+    public void UpdateWork(String status, String nis, String id_tugas) {
+        PreparedStatement st = null;
+        
+        String sql = "update work set status =? where nis=? && id_tugas=?";
         try {
             st = connection.prepareStatement(sql);
             st.setString(1, status);
             st.setString(2, nis);
-         
+            st.setString(3, id_tugas);
+            st.executeUpdate();
+        }catch (SQLException ex){
+            Logger.getLogger(WorkDoneModel.class.getName()).log(Level.SEVERE,null,ex);
+        }finally{
+            if(st!=null){
+                try{
+                    st.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(WorkDoneModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+            }
+        }                          
+    }
+    public void UpdateTugas(String status, String id_tugas) {
+        PreparedStatement st = null;
+        
+        String sql = "update tugas set status =? where id_tugas=?";
+        try {
+            st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            st.setString(2, id_tugas);
+            st.executeUpdate();
         }catch (SQLException ex){
             Logger.getLogger(WorkDoneModel.class.getName()).log(Level.SEVERE,null,ex);
         }finally{
