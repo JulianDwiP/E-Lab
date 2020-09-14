@@ -18,6 +18,8 @@ import elab.model.JadwalLabModel;
 import elab.model.Jadwal_mapelModel;
 import elab.model.Jumlah_mapelModel;
 import elab.model.MapelModel;
+import java.awt.AWTException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -395,7 +397,13 @@ public class FormMain extends javax.swing.JFrame {
         try {
             postBilling();
             dispose();
+            FormLogin fl = new FormLogin();
+            fl.setVisible(true);
         } catch (ParseException ex) {
+            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AWTException ex) {
+            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_logoutActionPerformed
@@ -404,7 +412,11 @@ public class FormMain extends javax.swing.JFrame {
         TampilanTask tampilanTask = new TampilanTask();
         tampilanTask.setVisible(true);
         
-        tampilanTask.setId_jadwal_mapel("8", txt_nis.getText());
+        try {
+            tampilanTask.setId_jadwal_mapel("8", txt_nis.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(FormMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_taskActionPerformed
 
     private void postBilling() throws ParseException{

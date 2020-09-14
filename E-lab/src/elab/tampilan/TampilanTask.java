@@ -5,12 +5,18 @@
  */
 package elab.tampilan;
 
+import elab.entity.attachment_work;
+import elab.entity.JumlahFileTugas;
 import elab.entity.Tugas;
 import elab.entity.WorkDone;
-import elab.model.DownloadTugasModel;
+import elab.model.Attachment_tugasModel;
 import elab.model.TugasModel;
+import elab.model.Attachment_workModel;
 import elab.model.WorkDoneModel;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,14 +27,19 @@ import javax.swing.JOptionPane;
  * @author Julian Dwi Putra
  */
 public class TampilanTask extends javax.swing.JFrame {
-    String id_jadwal_mapel, niss, id_tugas;
+    String id_jadwal_mapel, niss, id_tugas, id_work,path_file1,nama_file1, file_upload1;
     /**
      * Creates new form TampilanTask
      */
     public TampilanTask() {
         initComponents();
+        txt_deskripsi.setWrapStyleWord(true);
+        txt_deskripsi.setLineWrap(true);
     }
-
+    
+    public void setBtnUpload1(String nama){
+        file_upload1 = nama;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,17 +52,20 @@ public class TampilanTask extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         txt_deadline = new javax.swing.JLabel();
         txt_judulTask = new javax.swing.JLabel();
-        txt_deskripsi = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        label_attachment = new javax.swing.JLabel();
         btn_file1 = new javax.swing.JButton();
         btn_file2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        label_tugasAnda = new javax.swing.JLabel();
         btn_kirimFile = new javax.swing.JButton();
         btn_done = new javax.swing.JButton();
-        tx_id_jadwal_mapel = new javax.swing.JLabel();
+        txt_id_jadwal_mapel = new javax.swing.JLabel();
+        btn_file_upload1 = new javax.swing.JButton();
+        btn_hapus_file1 = new javax.swing.JButton();
         txt_status_tugas = new javax.swing.JLabel();
         btn_back = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txt_deskripsi = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,11 +73,7 @@ public class TampilanTask extends javax.swing.JFrame {
 
         txt_judulTask.setText("Judul tugas");
 
-        txt_deskripsi.setText("Deskripsi");
-        txt_deskripsi.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        txt_deskripsi.setAutoscrolls(true);
-
-        jLabel1.setText("Attachments");
+        label_attachment.setText("Attachments");
 
         btn_file1.setText("File 1");
         btn_file1.addActionListener(new java.awt.event.ActionListener() {
@@ -73,9 +83,14 @@ public class TampilanTask extends javax.swing.JFrame {
         });
 
         btn_file2.setText("File 2");
+        btn_file2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_file2ActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Tugas anda");
-        jLabel2.setToolTipText("");
+        label_tugasAnda.setText("Tugas anda");
+        label_tugasAnda.setToolTipText("");
 
         btn_kirimFile.setText("Kirim file");
         btn_kirimFile.addActionListener(new java.awt.event.ActionListener() {
@@ -91,30 +106,53 @@ public class TampilanTask extends javax.swing.JFrame {
             }
         });
 
-        tx_id_jadwal_mapel.setText("jLabel3");
+        txt_id_jadwal_mapel.setText("jLabel3");
+
+        btn_file_upload1.setText("lalala.docx");
+        btn_file_upload1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_file_upload1ActionPerformed(evt);
+            }
+        });
+
+        btn_hapus_file1.setText("Hapus");
+        btn_hapus_file1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_hapus_file1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btn_kirimFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btn_done, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_done, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(label_tugasAnda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(tx_id_jadwal_mapel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt_id_jadwal_mapel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_file_upload1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_hapus_file1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(label_tugasAnda, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_file_upload1)
+                    .addComponent(btn_hapus_file1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btn_kirimFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_done)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tx_id_jadwal_mapel)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addComponent(txt_id_jadwal_mapel))
         );
 
         txt_status_tugas.setText("Status : Not Done");
@@ -126,32 +164,40 @@ public class TampilanTask extends javax.swing.JFrame {
             }
         });
 
+        txt_deskripsi.setColumns(20);
+        txt_deskripsi.setRows(5);
+        jScrollPane1.setViewportView(txt_deskripsi);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_file1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_file2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txt_deskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(btn_back)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_status_tugas, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label_attachment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btn_back)
-                                .addGap(18, 18, 18)
-                                .addComponent(txt_deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_status_tugas, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_file1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_file2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(79, 79, 79)))
+                        .addGap(42, 42, 42))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,15 +210,15 @@ public class TampilanTask extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txt_judulTask, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(txt_deskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label_attachment, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_file1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_file2)
-                        .addContainerGap(25, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -215,73 +261,174 @@ public class TampilanTask extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_file1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_file1ActionPerformed
-        DownloadTugasModel downloadTugasModel = new DownloadTugasModel();
-        downloadTugasModel.downloadFile_1();
+        Attachment_tugasModel downloadTugasModel = new Attachment_tugasModel();
+        downloadTugasModel.downloadFile_1(id_tugas);
     }//GEN-LAST:event_btn_file1ActionPerformed
 
     private void btn_kirimFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kirimFileActionPerformed
-        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(null, "Kirim file?","Ya",
+            JOptionPane.OK_CANCEL_OPTION)== JOptionPane.OK_OPTION){
+            Attachment_workModel uploadWorkModel = new Attachment_workModel();
+            uploadWorkModel.UploadWork(id_work);
+            btn_file_upload1.setVisible(true);
+            btn_file_upload1.setText(file_upload1);
+            btn_hapus_file1.setVisible(true);
+        }else{
+            
+        }
+        getFileUpload(id_work);
     }//GEN-LAST:event_btn_kirimFileActionPerformed
+    
+    public void getFileUpload(String id_works){
+        Attachment_workModel uploadWorkModel = new Attachment_workModel();
+        attachment_work aw = new attachment_work();
+        aw = uploadWorkModel.getAttachment_work1(id_works);
+        attachment_work aw2 = new attachment_work();
+        aw2 = uploadWorkModel.getAttachment_work2(id_works);
+
+        if (aw != null && aw2!= null) {
+            btn_file_upload1.setText(aw.getNama_file());
+            path_file1 = aw.getPath_file();
+            nama_file1 = aw.getNama_file();
+        }else if (aw != null && aw2==null){
+            btn_file_upload1.setText(aw.getNama_file());
+            path_file1 = aw.getPath_file();
+            nama_file1 = aw.getNama_file();
+        }else{
+            btn_hapus_file1.setVisible(false);
+            btn_file_upload1.setVisible(false);
+        }
+    }
+    private void btn_file2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_file2ActionPerformed
+        Attachment_tugasModel downloadTugasModel = new Attachment_tugasModel();
+        downloadTugasModel.downloadFile_2(id_tugas);
+    }//GEN-LAST:event_btn_file2ActionPerformed
+
+    private void btn_file_upload1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_file_upload1ActionPerformed
+
+        String path = path_file1.replace('\\' , '/');
+        try {
+            openfile(path);
+        } catch (IOException ex) {
+            Logger.getLogger(TampilanTask.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_file_upload1ActionPerformed
+
+    private void btn_hapus_file1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapus_file1ActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Apakah Yakin Di Hapus?","konfirmasi",
+        JOptionPane.OK_CANCEL_OPTION)== JOptionPane.OK_OPTION){
+            Attachment_workModel attachment_workModel = new Attachment_workModel();
+            attachment_workModel.delete_work(nama_file1);
+            btn_file_upload1.setVisible(false);
+            btn_hapus_file1.setVisible(false);
+            JOptionPane.showMessageDialog(null, "File berhasil dihapus");
+        }else{
+            
+        }
+    }//GEN-LAST:event_btn_hapus_file1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public void setId_jadwal_mapel(String id_jadwal, String nis){
-        tx_id_jadwal_mapel.setText(id_jadwal);
-        id_jadwal_mapel = tx_id_jadwal_mapel.getText();
+    public void setId_jadwal_mapel(String id_jadwal, String nis) throws IOException{
+        txt_id_jadwal_mapel.setText(id_jadwal);
+        id_jadwal_mapel = txt_id_jadwal_mapel.getText();
         niss = nis;
-        tx_id_jadwal_mapel.setVisible(false);
+        txt_id_jadwal_mapel.setVisible(false);
         getTugas();
-       
+    }
+    
+    private void openfile(String filename) throws IOException{
+        File file = new File(filename);
+        
+        if(!Desktop.isDesktopSupported()){
+            JOptionPane.showMessageDialog(null, "Tidak bisa membuka file");
+            return;
+        }
+        
+        Desktop desktop = Desktop.getDesktop();
+        if(file.exists()){
+            desktop.open(file);
+        }else{
+            JOptionPane.showMessageDialog(null, "File tidak ada");
+        }
     }
    
-    private void getTugas() {
+    private void getTugas() throws IOException {
         Tugas t = new Tugas();
         TugasModel tm = new TugasModel();
         
         t = tm.getTugas(id_jadwal_mapel);
-        id_tugas = t.getId_tugas();
-        WorkDone w = new WorkDone();
-        WorkDoneModel workDoneModel = new WorkDoneModel();
-        
-        w = workDoneModel.getWork(niss, id_tugas);
-        if(w == null){
-            workDoneModel.InsertWork(niss, id_tugas, "Not Done");
-            w = workDoneModel.getWork(niss, id_tugas);
+        if (t != null) {
+            id_tugas = t.getId_tugas();
+            txt_deskripsi.setPreferredSize(new Dimension(250,159));
+            txt_deadline.setText("Deadline tugas "+t.getDue_date());
+            txt_judulTask.setText(t.getTitle());
+            txt_deskripsi.setText(t.getDescription());
+            txt_status_tugas.setText("Status : "+t.getStatus());
             
-            if (w.getStatus().equals("Done")) {
-            txt_status_tugas.setText("Status : Done");
-            btn_done.setText("Turn Off");
+            getAttachmentTugas();
+            
+            WorkDone w = new WorkDone();
+            WorkDoneModel workDoneModel = new WorkDoneModel();
+        
+            w = workDoneModel.getWork(niss, id_tugas);
+            if(w == null){
+                workDoneModel.InsertWork(niss, id_tugas, "Not Done");
+                w = workDoneModel.getWork(niss, id_tugas);
+                id_work = w.getId_work();
+                  
+                getFileUpload(id_work);
+
+                if (w.getStatus().equals("Done")) {
+                txt_status_tugas.setText("Status : Done");
+                btn_done.setText("Turn Off");
+                }else{
+                txt_status_tugas.setText("Status : Not Done");
+                btn_done.setText("Turn In");
+                }
             }else{
-            txt_status_tugas.setText("Status : Not Done");
-            btn_done.setText("Turn In");
+                id_work = w.getId_work();
+                getFileUpload(id_work);
+
+                if (w.getStatus().equals("Done")) {
+                txt_status_tugas.setText("Status : Done");
+                btn_done.setText("Turn Off");
+                }else{
+                txt_status_tugas.setText("Status : Not Done");
+                btn_done.setText("Turn In");
+                }
             }
-            if (t != null) {
-            txt_deskripsi.setPreferredSize(new Dimension(250,159));
-            txt_deadline.setText("Deadline tugas "+t.getDue_date());
-            txt_judulTask.setText(t.getTitle());
-            txt_deskripsi.setText(t.getDescription());
-            txt_status_tugas.setText("Status : "+t.getStatus());
-            }else{
-            txt_deadline.setText("no tugas");
-          }
         }else{
-            if (w.getStatus().equals("Done")) {
-            txt_status_tugas.setText("Status : Done");
-            btn_done.setText("Turn Off");
-            }else{
-            txt_status_tugas.setText("Status : Not Done");
-            btn_done.setText("Turn In");
-            }
-            if (t != null) {
-            txt_deskripsi.setPreferredSize(new Dimension(250,159));
-            txt_deadline.setText("Deadline tugas "+t.getDue_date());
-            txt_judulTask.setText(t.getTitle());
-            txt_deskripsi.setText(t.getDescription());
-            txt_status_tugas.setText("Status : "+t.getStatus());
-            }else{
-            txt_deadline.setText("no tugas");
-          }
+                txt_deadline.setText("no tugas");
+                btn_done.setVisible(false);
+                btn_file1.setVisible(false);
+                btn_file2.setVisible(false);
+                btn_kirimFile.setVisible(false);
+                txt_deskripsi.setVisible(false);
+                txt_judulTask.setVisible(false);
+                txt_deskripsi.setVisible(false);
+                txt_status_tugas.setVisible(false);
+                txt_id_jadwal_mapel.setVisible(false);
+                label_attachment.setVisible(false);
+                label_tugasAnda.setVisible(false);
+                btn_file_upload1.setVisible(false);
+                btn_hapus_file1.setVisible(false);
+        }
+        
+    }
+    private void getAttachmentTugas(){
+        JumlahFileTugas jft = new JumlahFileTugas();
+        Attachment_tugasModel dw = new Attachment_tugasModel();
+        jft = dw.getDownload_row(id_tugas);
+        if (jft.getHasil().equals("0")) {
+            btn_file1.setVisible(false);
+            btn_file2.setVisible(false);
+        }else if(jft.getHasil().equals("1")){
+            btn_file2.setVisible(false);
+        }else if(jft.getHasil().equals("2")){
+            btn_file1.setVisible(true);
+            btn_file2.setVisible(true);
         }
     }
     public static void main(String args[]) {
@@ -321,14 +468,17 @@ public class TampilanTask extends javax.swing.JFrame {
     private javax.swing.JButton btn_done;
     private javax.swing.JButton btn_file1;
     private javax.swing.JButton btn_file2;
+    private javax.swing.JButton btn_file_upload1;
+    private javax.swing.JButton btn_hapus_file1;
     private javax.swing.JButton btn_kirimFile;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel tx_id_jadwal_mapel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel label_attachment;
+    private javax.swing.JLabel label_tugasAnda;
     private javax.swing.JLabel txt_deadline;
-    private javax.swing.JLabel txt_deskripsi;
+    private javax.swing.JTextArea txt_deskripsi;
+    private javax.swing.JLabel txt_id_jadwal_mapel;
     private javax.swing.JLabel txt_judulTask;
     private javax.swing.JLabel txt_status_tugas;
     // End of variables declaration//GEN-END:variables
