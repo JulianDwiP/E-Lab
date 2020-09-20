@@ -5,12 +5,24 @@
  */
 package elab.entity;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author Julian Dwi Putra
  */
 public class WorkDone {
     String id_work,nis,id_tugas,status;
+    Timestamp date_time;
+
+    public Timestamp getDate_time() {
+        return date_time;
+    }
+
+    public void setDate_time(Timestamp date_time) {
+        this.date_time = date_time;
+    }
+    
 
     public String getId_work() {
         return id_work;

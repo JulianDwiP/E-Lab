@@ -29,7 +29,7 @@ public class TugasModel {
         ResultSet rs = null;
         Tugas m = null;
         
-        String sql = "select * from tugas where id_jadwal_mapel =?";
+        String sql = "select * from tugas where id_tugas =?";
         try {
             st = connection.prepareStatement(sql);
             st.setString(1, id_mapel);
@@ -42,7 +42,7 @@ public class TugasModel {
               m.setId_jadwal_mapel(rs.getString("id_jadwal_mapel"));
               m.setTitle(rs.getString("title"));
               m.setDescription(rs.getString("description"));
-              m.setDue_date(rs.getString("due_date"));
+              m.setDue_date(rs.getTimestamp("due_date"));
               m.setStatus(rs.getString("status"));
           }
           return m;

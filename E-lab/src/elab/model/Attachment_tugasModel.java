@@ -39,7 +39,9 @@ public class Attachment_tugasModel {
     FileOutputStream output = null;
     ResultSet rs = null;
     String filename = "";
-    String SQL = "SELECT attachment,nama_file FROM attachment_tugas WHERE id_tugas=? limit 0,1"; //Here I mistakenly wrote 'FILANAME' here instead of a 'PICTURE'
+    String type = "";
+    String realType = "";
+    String SQL = "SELECT attachment,nama_file,type FROM attachment_tugas WHERE id_tugas=? limit 0,1"; //Here I mistakenly wrote 'FILANAME' here instead of a 'PICTURE'
     try {
         smt = connection.prepareStatement(SQL);
         smt.setString(1, id_tugas);  //in this row we have a png picture
@@ -49,17 +51,12 @@ public class Attachment_tugasModel {
             java.sql.Blob blob = rs.getBlob("attachment");
             input = blob.getBinaryStream(); //get it from col name
             filename = rs.getString("nama_file");
-            output = new FileOutputStream(new File("/Users/ASUS/Downloads/"+filename));
+            type = rs.getString("type");
+            realType = type.substring(type.lastIndexOf("/")+1, type.length());
+            output = new FileOutputStream(new File("/Users/ASUS/Downloads/"+filename+"."+realType));
+            
             
             int r = 0;
-
-/*
-*there I've tried with array but nothing changed..Like this :
-* byte[] buffer = new byte[2048];
-* int r = 0;
-* while((r = input.read(buffer)) != -1){
-*        out.write(buffer,0,r);}
-*/
 
             while ((r = input.read()) != -1) {
                 output.write(r);
@@ -67,7 +64,7 @@ public class Attachment_tugasModel {
             }
         }
         
-        File file = new File("/Users/ASUS/Downloads/"+filename);
+        File file = new File("/Users/ASUS/Downloads/"+filename+"."+realType);
         if(!Desktop.isDesktopSupported()){
             System.out.println("Desktop is not supported");
             return;

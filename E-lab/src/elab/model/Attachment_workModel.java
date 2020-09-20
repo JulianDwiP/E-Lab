@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,7 +65,7 @@ public class Attachment_workModel {
                 InputStream inputStream = new FileInputStream(file);
                 st.setBlob(2, inputStream);
                 java.util.Date date=new java.util.Date();
-                java.sql.Date sqlDate=new java.sql.Date(0000-00-00);
+                java.sql.Date sqlDate=new java.sql.Date(date.getTime());
                 st.setDate(3, sqlDate);
                 st.setDate(4, sqlDate);
                 st.setDate(5, sqlDate);
@@ -107,6 +108,8 @@ public class Attachment_workModel {
               aw.setId_attachment_work(rs.getString("id_attachment_work"));
               aw.setId_work(rs.getString("id_work"));
               aw.setPath_file(rs.getString("path_file"));
+              
+              
               TampilanTask task = new TampilanTask();
               task.setBtnUpload1(rs.getString("nama_file"));
           }
@@ -149,6 +152,10 @@ public class Attachment_workModel {
               aw.setNama_file(rs.getString("nama_file"));
               aw.setId_attachment_work(rs.getString("id_attachment_work"));
               aw.setId_work(rs.getString("id_work"));
+              aw.setPath_file(rs.getString("path_file"));
+              
+              TampilanTask ts = new TampilanTask();
+              ts.setBtnUpload2(rs.getString("nama_file"));
           }
           return aw;
         }catch (SQLException ex){

@@ -5,13 +5,25 @@
  */
 package elab.entity;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author Julian Dwi Putra
  */
 public class Tugas {
-    String id_tugas, id_jadwal_mapel,title,description,due_date,status;
+    String id_tugas, id_jadwal_mapel,title,description,status;
+    Timestamp due_date;
 
+    public Timestamp getDue_date() {
+        return due_date;
+    }
+
+    public void setDue_date(Timestamp due_date) {
+        this.due_date = due_date;
+    }
+
+    
     public String getStatus() {
         return status;
     }
@@ -52,14 +64,4 @@ public class Tugas {
         this.description = description;
     }
 
-    public String getDue_date() {
-        return due_date;
-    }
-
-    public void setDue_date(String due_date) {
-        this.due_date = due_date;
-    }
-    
-    
-    
 }
