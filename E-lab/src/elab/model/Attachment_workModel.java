@@ -54,7 +54,7 @@ public class Attachment_workModel {
              String path = file.getAbsolutePath();
 
             try {
-                String sql = "INSERT INTO attachment_work (id_work, attachment, created_at,updated_at, deleted_at, nama_file,path_file) values (?, ?, ?,?,?,?,?)";
+                String sql = "INSERT INTO attachment_work (id_work, attachment, created_at,updated_at, deleted_at, nama_file,path_file,type) values (?, ?, ?,?,?,?,?,?)";
                 st = (PreparedStatement) connection.prepareStatement(sql);
 
                 // max limit 1MB
@@ -71,11 +71,12 @@ public class Attachment_workModel {
                 st.setDate(5, sqlDate);
                 st.setString(6, nama_file);
                 st.setString(7, path);
+                st.setString(8, "file");
 
 
                 int row = st.executeUpdate();
                 if (row > 0) {
-                    
+                    JOptionPane.showMessageDialog(null, "File berhasil terkirim");
                 }
 
             } catch (SQLException ex) {

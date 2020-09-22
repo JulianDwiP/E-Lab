@@ -155,7 +155,7 @@ public class Attachment_tugasModel {
         ResultSet rs = null;
         JumlahFileTugas jft = null;
         
-        String sql = "select count(id_attachment) as hasil from attachment_tugas where id_tugas =?";
+        String sql = "select count(id_attachment_tugas) as hasil from attachment_tugas where id_tugas =?";
         try {
             st = connection.prepareStatement(sql);
             st.setString(1, id_tugas);

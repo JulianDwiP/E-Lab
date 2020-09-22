@@ -11,9 +11,9 @@ import elab.entity.Jadwal_mapel1;
 import elab.entity.Jadwal_mapel2;
 import elab.entity.Jadwal_mapel3;
 import elab.entity.Jadwal_mapel4;
-import elab.entity.Mapel1;
-import elab.entity.Mapel2;
-import elab.entity.Mapel3;
+import elab.entity.Nama_guru1;
+import elab.entity.Nama_guru2;
+import elab.entity.Nama_guru3;
 import elab.entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,164 +21,166 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  *
- * @author Julian Dwi Putra
+ * @author ASUS
  */
-public class MapelModel {
-    private Connection connection;
-
-    public MapelModel(){
+public class NamaGuruModel {
+     private Connection connection;
+     
+      public NamaGuruModel(){
         connection = Database.getConnection();
-    } 
-    public Mapel1 getMapel_1(Jadwal_mapel1 id_mapel) {
+    }
+      public Nama_guru1 getNama_guru1(Jadwal_mapel1 id_guru) {
         PreparedStatement st = null;
         ResultSet rs = null;
-        Mapel1 m = null;
+        Nama_guru1 n = null;
         
-        String sql = "select * from mapel where id_mapel =?";
+        String sql = "select * from guru where id_guru =?";
         try {
             st = connection.prepareStatement(sql);
-            st.setString(1, id_mapel.getId_mapel());
+            st.setString(1, id_guru.getId_guru());
             rs = st.executeQuery();
             
             
           while (rs.next()){
-              m = new Mapel1();
-              m.setId_mapel(rs.getString("id_mapel"));
-              m.setNama_Mapel(rs.getString("nama_mapel"));
+              n = new Nama_guru1();
+              n.setId_guru(rs.getString("id_guru"));
+              n.setNama_Guru(rs.getString("nama_guru"));
           }
-          return m;
+          return n;
         }catch (SQLException ex){
-            Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
             return null;
         }finally{
             if(st!=null){
                 try{
                     st.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
             }
             if (rs!=null){
                 try{    
                      rs.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
                 }                          
             }
         }
 
-        public Mapel1 getMapel_2(Jadwal_mapel2 id_mapel) {
+        public Nama_guru1 getNama_guru2(Jadwal_mapel2 id_guru) {
         PreparedStatement st = null;
         ResultSet rs = null;
-        Mapel1 m = null;
+        Nama_guru1 n = null;
         
-        String sql = "select * from mapel where id_mapel =?";
+        String sql = "select * from guru where id_guru =?";
         try {
             st = connection.prepareStatement(sql);
-            st.setString(1, id_mapel.getId_mapel());
+            st.setString(1, id_guru.getId_guru());
             rs = st.executeQuery();
             
             
           while (rs.next()){
-              m = new Mapel1();
-              m.setId_mapel(rs.getString("id_mapel"));
-              m.setNama_Mapel(rs.getString("nama_mapel"));
+              n = new Nama_guru1();
+              n.setId_guru(rs.getString("id_guru"));
+              n.setNama_Guru(rs.getString("nama_guru"));
           }
-          return m;
+          return n;
         }catch (SQLException ex){
-            Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
             return null;
         }finally{
             if(st!=null){
                 try{
                     st.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
             }
             if (rs!=null){
                 try{    
                      rs.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
                 }                          
             }
         }
-        public Mapel1 getMapel_3(Jadwal_mapel3 id_mapel) {
+        public Nama_guru1 getNama_guru3(Jadwal_mapel3 id_guru) {
         PreparedStatement st = null;
         ResultSet rs = null;
-        Mapel1 m = null;
+        Nama_guru1 n = null;
         
-        String sql = "select * from mapel where id_mapel =?";
+        String sql = "select * from guru where id_guru =?";
         try {
             st = connection.prepareStatement(sql);
-            st.setString(1, id_mapel.getId_mapel());
+            st.setString(1, id_guru.getId_guru());
             rs = st.executeQuery();
-
+            
+            
           while (rs.next()){
-              m = new Mapel1();
-              m.setId_mapel(rs.getString("id_mapel"));
-              m.setNama_Mapel(rs.getString("nama_mapel"));
+              n = new Nama_guru1();
+              n.setId_guru(rs.getString("id_guru"));
+              n.setNama_Guru(rs.getString("nama_guru"));
           }
-          return m;
+          return n;
         }catch (SQLException ex){
-            Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
             return null;
         }finally{
             if(st!=null){
                 try{
                     st.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                        Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
             }
             if (rs!=null){
                 try{    
                      rs.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
                 }                          
             }
         }
-        public Mapel1 getMapel_4(Jadwal_mapel4 id_mapel) {
+        
+        public Nama_guru1 getNama_guru4(Jadwal_mapel4 id_guru) {
         PreparedStatement st = null;
         ResultSet rs = null;
-        Mapel1 m = null;
+        Nama_guru1 n = null;
         
-        String sql = "select * from mapel where id_mapel =?";
+        String sql = "select * from guru where id_guru =?";
         try {
             st = connection.prepareStatement(sql);
-            st.setString(1, id_mapel.getId_mapel());
+            st.setString(1, id_guru.getId_guru());
             rs = st.executeQuery();
-
+            
+            
           while (rs.next()){
-              m = new Mapel1();
-              m.setId_mapel(rs.getString("id_mapel"));
-              m.setNama_Mapel(rs.getString("nama_mapel"));
+              n = new Nama_guru1();
+              n.setId_guru(rs.getString("id_guru"));
+              n.setNama_Guru(rs.getString("nama_guru"));
           }
-          return m;
+          return n;
         }catch (SQLException ex){
-            Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
             return null;
         }finally{
             if(st!=null){
                 try{
                     st.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                        Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
             }
             if (rs!=null){
                 try{    
                      rs.close();
                 }catch (SQLException ex){
-                    Logger.getLogger(MapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                    Logger.getLogger(NamaGuruModel.class.getName()).log(Level.SEVERE,null,ex);
                 }
                 }                          
             }

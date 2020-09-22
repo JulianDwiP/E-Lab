@@ -12,6 +12,7 @@ import elab.entity.Jadwal_lab2;
 import elab.entity.Jadwal_mapel1;
 import elab.entity.Jadwal_mapel2;
 import elab.entity.Jadwal_mapel3;
+import elab.entity.Jadwal_mapel4;
 import elab.entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -156,6 +157,48 @@ public class Jadwal_mapelModel {
                 }                          
             }
         }
+    public Jadwal_mapel4 getJadwal_mapel4(Jadwal_lab1 jadwal_lab1) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        Jadwal_mapel4 jm4 = null;
+        
+        String sql = "select * from jadwal_mapel where id_jadwal_lab=? order by jam_mulai limit 3,1";
+        try {
+            st = connection.prepareStatement(sql);
+            st.setString(1, jadwal_lab1.getId_jadwal_lab());
+            rs = st.executeQuery();
+
+          while (rs.next()){
+              jm4 = new Jadwal_mapel4();
+              jm4.setId_jadwal_lab(rs.getString("id_jadwal_mapel"));
+              jm4.setId_kelas(rs.getString("id_kelas"));
+              jm4.setId_jadwal_lab(rs.getString("id_jadwal_lab"));
+              jm4.setId_mapel(rs.getString("id_mapel"));
+              jm4.setId_guru(rs.getString("id_guru"));
+              jm4.setJam_mulai(rs.getString("jam_mulai"));
+              jm4.setJam_selesai(rs.getString("jam_selesai"));
+          }
+          return jm4;
+        }catch (SQLException ex){
+            Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            return null;
+        }finally{
+            if(st!=null){
+                try{
+                    st.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+            }
+            if (rs!=null){
+                try{    
+                     rs.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+                }                          
+            }
+        }
     
     public Jadwal_mapel1 getJadwal_mapel2_1(Jadwal_lab2 jadwal_lab1) {
         PreparedStatement st = null;
@@ -263,6 +306,48 @@ public class Jadwal_mapelModel {
               jm3.setJam_selesai(rs.getString("jam_selesai"));
           }
           return jm3;
+        }catch (SQLException ex){
+            Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+            return null;
+        }finally{
+            if(st!=null){
+                try{
+                    st.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+            }
+            if (rs!=null){
+                try{    
+                     rs.close();
+                }catch (SQLException ex){
+                    Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
+                }
+                }                          
+            }
+        }
+    public Jadwal_mapel4 getJadwal_mapel2_4(Jadwal_lab2 jadwal_lab1) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        Jadwal_mapel4 jm4 = null;
+        
+        String sql = "select * from jadwal_mapel where id_jadwal_lab=? order by jam_mulai limit 3,1";
+        try {
+            st = connection.prepareStatement(sql);
+            st.setString(1, jadwal_lab1.getId_jadwal_lab());
+            rs = st.executeQuery();
+
+          while (rs.next()){
+              jm4 = new Jadwal_mapel4();
+              jm4.setId_jadwal_lab(rs.getString("id_jadwal_mapel"));
+              jm4.setId_kelas(rs.getString("id_kelas"));
+              jm4.setId_jadwal_lab(rs.getString("id_jadwal_lab"));
+              jm4.setId_mapel(rs.getString("id_mapel"));
+              jm4.setId_guru(rs.getString("id_guru"));
+              jm4.setJam_mulai(rs.getString("jam_mulai"));
+              jm4.setJam_selesai(rs.getString("jam_selesai"));
+          }
+          return jm4;
         }catch (SQLException ex){
             Logger.getLogger(Jadwal_mapelModel.class.getName()).log(Level.SEVERE,null,ex);
             return null;

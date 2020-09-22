@@ -11,6 +11,7 @@ import elab.entity.Jadwal_lab2;
 import elab.entity.Jadwal_mapel1;
 import elab.entity.Jumlah_mapel;
 import elab.entity.Mapel1;
+import elab.entity.Nama_guru1;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
